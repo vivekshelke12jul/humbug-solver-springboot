@@ -18,12 +18,12 @@ public class State {
     // class StartTile inherits from Tile,
     // class Unreachable inherits from Tile
     // or simply use a Tile enum
-    private ArrayDeque<ArrayDeque<Character>> grid;
+    private int[][] grid;
     private HashSet<Bug> bugs;
 
     public State(){}
 
-    public State(int rows, int columns, ArrayDeque<ArrayDeque<Character>> grid, HashSet<Bug> bugs) {
+    public State(int rows, int columns, int[][] grid, HashSet<Bug> bugs) {
         this.rows = rows;
         this.columns = columns;
         this.grid = grid;
@@ -54,11 +54,11 @@ public class State {
         this.columns = columns;
     }
 
-    public ArrayDeque<ArrayDeque<Character>> getGrid() {
+    public int[][] getGrid() {
         return grid;
     }
 
-    public void setGrid(ArrayDeque<ArrayDeque<Character>> grid) {
+    public void setGrid(int[][] grid) {
         this.grid = grid;
     }
 
@@ -83,7 +83,7 @@ public class State {
 
         // new position of the bug
         int newXBug = initialXBug;
-        int newYBug = initialXBug;
+        int newYBug = initialYBug;
 
         switch (action.getDirection()){
             case UP:
@@ -100,9 +100,25 @@ public class State {
                 break;
         }
 
-        // check if the new position is valid
-        //not sure if "==" works here or should i use .equals()
-        if(this.grid[newXBug][newYBug] == 'B ')
+        // remove bug from old position
+        clonedState.getGrid()[initialXBug][initialYBug] = ' ';
+        clonedState.getBugs().remove(action.getBug());
 
+        // check if the new position is Invalid => return null
+        if(this.grid[newXBug][newYBug] == 'B' || this.grid[newXBug][newYBug] == '#'){
+            return Optional.empty();
+        }
+
+        //check if the new position is '*' => add empty tile to new position, because('B' + '*' = ' ')
+        if(this.grid[newXBug][newYBug] == '*'){
+            clonedState.getGrid()[newXBug][newYBug] = ' ';
+            // no need to add a new bug to new position
+        }
+        else if(this.grid[newXBug][newYBug] == ' '){
+            clonedState.getGrid()[newXBug][newYBug] = 'B';
+            clonedState.getBugs().add(new Bug(newXBug, newYBug, "Snail"));
+        }
+
+        return Optional.of(clonedState);
     }
 }

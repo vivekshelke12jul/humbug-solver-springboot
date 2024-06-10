@@ -34,25 +34,26 @@ public class Solver {
             Node currentNode = queue.removeFirst();
 
             if (currentNode.getState().isGoalState()) {
-                solution = new Solution();
+                this.solution = new Solution();
                 while (currentNode.getParent() != null) {
-                    solution.addAction(currentNode.getAction());
+                    // addAction method is adding action from front;
+                    this.solution.addAction(currentNode.getAction());
                     currentNode = currentNode.getParent();
                 }
 
-                solution.setTotalVisitedStates(visitedStatesCount);
-                return solution;
+                this.solution.setTotalVisitedStates(visitedStatesCount);
+                return Optional.of(solution);
             }
 
             ArrayDeque<Node> children = currentNode.getChildren();
             for (Node child : children) {
                 if (!visitedStates.contains(child.getState())) {
-                    queue.add(child);
+                    queue.addLast(child);
                     visitedStates.add(child.getState());
                     visitedStatesCount++;
                 }
             }
-
-
-
+        }
+        return Optional.empty();
+    }
 }

@@ -15,7 +15,7 @@ public class Solution {
     }
 
     public void addAction(Action action){
-        actions.add(action);
+        actions.addFirst(action);
     }
 
     public ArrayDeque<Action> getActions(){
