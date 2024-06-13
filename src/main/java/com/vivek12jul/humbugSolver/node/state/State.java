@@ -3,39 +3,48 @@ package com.vivek12jul.humbugSolver.node.state;
 import com.vivek12jul.humbugSolver.node.state.action.Action;
 import com.vivek12jul.humbugSolver.node.state.action.bug.Bug;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 public class State {
     private int rows;
     private int columns;
-
-    // in future we can use ArrayDeque<ArrayDeque<Tile>>, Where Tile will be another class,
-    // class BlankTile inherits from Tile,
-    // class bugTile inherits from Tile,
-    // class StartTile inherits from Tile,
-    // class Unreachable inherits from Tile
-    // or simply use a Tile enum
-    private int[][] grid;
+    private Grid grid;
     private HashSet<Bug> bugs;
 
     public State(){}
 
-    public State(int rows, int columns, int[][] grid, HashSet<Bug> bugs) {
-        this.rows = rows;
-        this.columns = columns;
-        this.grid = grid;
-        this.bugs = bugs;
+    public State(int rows, int columns, Grid grid, HashSet<Bug> bugs) {
+        this.setRows(rows);
+        this.setColumns(columns);
+        this.setGrid(grid);
+        this.setBugs(bugs);
     }
 
     // Copy constructor
-    private State(State state){
-        this.rows = state.getRows();
-        this.columns = state.getColumns();
-        this.grid = state.getGrid();
-        this.bugs = state.getBugs();
+    public State(State state){
+        this.setRows(state.getRows());
+        this.setColumns(state.getColumns());
+        this.setGrid(state.getGrid());
+        this.setBugs(state.getBugs());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        State state = (State) obj;
+        return rows == state.rows &&
+                columns == state.columns &&
+                Objects.equals(grid, state.grid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rows, columns, grid);
     }
 
     public int getRows() {
@@ -54,12 +63,12 @@ public class State {
         this.columns = columns;
     }
 
-    public int[][] getGrid() {
+    public Grid getGrid() {
         return grid;
     }
 
-    public void setGrid(int[][] grid) {
-        this.grid = grid;
+    public void setGrid(Grid grid) {
+        this.grid = new Grid(grid);
     }
 
     public HashSet<Bug> getBugs() {
@@ -67,7 +76,29 @@ public class State {
     }
 
     public void setBugs(HashSet<Bug> bugs) {
-        this.bugs = bugs;
+        this.bugs = new HashSet<>(bugs);
+    }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "rows=" + rows +
+                ", columns=" + columns +
+                ", grid=" + grid +
+                ", bugs=" + bugs +
+                '}';
+    }
+
+    public void printState() {
+        System.out.println("\n================ State ===============");
+        System.out.println("Grid: ");
+        grid.printGrid();
+        System.out.println("\n---------------------------------------\n");
+//        System.out.println("Bugs: ");
+//        for(Bug bug : bugs) {
+//            System.out.println(bug.toString());
+//        }
+//        System.out.println("\n---------------------------------------\n");
     }
 
     public boolean isGoalState() {
@@ -101,24 +132,29 @@ public class State {
         }
 
         // remove bug from old position
-        clonedState.getGrid()[initialXBug][initialYBug] = ' ';
+        clonedState.getGrid().getMatrix()[initialXBug][initialYBug] = ' ';
         clonedState.getBugs().remove(action.getBug());
 
         // check if the new position is Invalid => return null
-        if(this.grid[newXBug][newYBug] == 'B' || this.grid[newXBug][newYBug] == '#'){
+        if(
+                newXBug < 0 || newXBug >= this.rows ||
+                newYBug < 0 || newYBug >= this.columns ||
+                this.grid.getMatrix()[newXBug][newYBug] == 'B' ||
+                this.grid.getMatrix()[newXBug][newYBug] == '#'){
             return Optional.empty();
         }
 
         //check if the new position is '*' => add empty tile to new position, because('B' + '*' = ' ')
-        if(this.grid[newXBug][newYBug] == '*'){
-            clonedState.getGrid()[newXBug][newYBug] = ' ';
+        if(this.grid.getMatrix()[newXBug][newYBug] == '*'){
+            clonedState.getGrid().getMatrix()[newXBug][newYBug] = ' ';
             // no need to add a new bug to new position
         }
-        else if(this.grid[newXBug][newYBug] == ' '){
-            clonedState.getGrid()[newXBug][newYBug] = 'B';
+        else if(this.grid.getMatrix()[newXBug][newYBug] == ' '){
+            clonedState.getGrid().getMatrix()[newXBug][newYBug] = 'B';
             clonedState.getBugs().add(new Bug(newXBug, newYBug, "Snail"));
         }
 
         return Optional.of(clonedState);
     }
+
 }

@@ -13,9 +13,16 @@ public class Action {
         RIGHT
     }
 
+    public Action(){}
+
     public Action(Bug bug, Direction direction) {
-        this.bug = bug;
+        this.bug = new Bug(bug.getRow(), bug.getColumn(), bug.getType());
         this.direction = direction;
+    }
+
+    public Action(Action action) {
+        this.bug = new Bug(action.getBug());
+        this.direction = action.getDirection();
     }
 
 
@@ -33,7 +40,7 @@ public class Action {
     }
 
     public void setBug(Bug bug) {
-        this.bug = bug;
+        this.bug = new Bug(bug);
     }
 
 }

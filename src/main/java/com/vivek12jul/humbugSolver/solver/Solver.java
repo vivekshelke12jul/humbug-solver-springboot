@@ -30,10 +30,16 @@ public class Solver {
 
 
     public Optional<Solution> getSolution() {
+        System.out.println("Inside getsoln");
         while (!queue.isEmpty()) {
             Node currentNode = queue.removeFirst();
+//            System.out.println("node" + currentNode.hashCode());
+            System.out.println(visitedStates.size());
+            currentNode.getState().printState();//<==========================================================
 
             if (currentNode.getState().isGoalState()) {
+                System.out.println("goal node found");
+
                 this.solution = new Solution();
                 while (currentNode.getParent() != null) {
                     // addAction method is adding action from front;
