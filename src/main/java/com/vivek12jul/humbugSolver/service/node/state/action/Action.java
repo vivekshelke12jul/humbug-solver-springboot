@@ -1,6 +1,6 @@
-package com.vivek12jul.humbugSolver.node.state.action;
+package com.vivek12jul.humbugSolver.service.node.state.action;
 
-import com.vivek12jul.humbugSolver.node.state.action.bug.Bug;
+import com.vivek12jul.humbugSolver.service.node.state.action.bug.Bug;
 
 public class Action {
 

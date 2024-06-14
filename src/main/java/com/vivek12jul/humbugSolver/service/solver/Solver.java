@@ -1,10 +1,13 @@
-package com.vivek12jul.humbugSolver.solver;
+package com.vivek12jul.humbugSolver.service.solver;
 
-import com.vivek12jul.humbugSolver.node.Node;
-import com.vivek12jul.humbugSolver.node.state.State;
+import com.vivek12jul.humbugSolver.dao.ResponseEntity;
+import com.vivek12jul.humbugSolver.service.node.Node;
+import com.vivek12jul.humbugSolver.service.node.state.State;
 
 import java.util.*;
 
+
+// In future make solver an Interface
 public class Solver {
 
     private Node startNode;
@@ -15,9 +18,8 @@ public class Solver {
 
     private int visitedStatesCount;
 
-    Solution solution;
 
-    Solver(State state) {
+    public Solver(State state) {
         this.startNode = new Node(state, null, null, 0);
         this.queue = new ArrayDeque<>();
         this.queue.add(this.startNode);
@@ -25,30 +27,30 @@ public class Solver {
         this.visitedStates = new HashSet<>();
         this.visitedStates.add(this.startNode.getState());
         this.visitedStatesCount = 1;
-        this.solution = new Solution();
     }
 
 
-    public Optional<Solution> getSolution() {
+    public ResponseEntity getSolution() {
         System.out.println("Inside getsoln");
         while (!queue.isEmpty()) {
             Node currentNode = queue.removeFirst();
-//            System.out.println("node" + currentNode.hashCode());
-            System.out.println(visitedStates.size());
-            currentNode.getState().printState();//<==========================================================
+            System.out.println("Exploring Node@hashcode=" + currentNode.hashCode());
+//            currentNode.getState().printState();//<==========================================================
 
             if (currentNode.getState().isGoalState()) {
                 System.out.println("goal node found");
+                // Goal node is found return the solution in form of responseEntity;
+                ResponseEntity responseEntity = new ResponseEntity(true);
 
-                this.solution = new Solution();
                 while (currentNode.getParent() != null) {
-                    // addAction method is adding action from front;
-                    this.solution.addAction(currentNode.getAction());
+
+                    responseEntity.prependInSolutionPath(currentNode);
                     currentNode = currentNode.getParent();
                 }
+                responseEntity.setTotalVisitedStates(visitedStatesCount);
+                System.out.println("solutionPath Created");
 
-                this.solution.setTotalVisitedStates(visitedStatesCount);
-                return Optional.of(solution);
+                return responseEntity;
             }
 
             ArrayDeque<Node> children = currentNode.getChildren();
@@ -60,6 +62,6 @@ public class Solver {
                 }
             }
         }
-        return Optional.empty();
+        return new ResponseEntity(false);
     }
 }

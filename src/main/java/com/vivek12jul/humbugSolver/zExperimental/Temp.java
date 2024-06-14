@@ -1,9 +1,8 @@
-package com.vivek12jul.humbugSolver.temp;
+package com.vivek12jul.humbugSolver.zExperimental;
 
-import com.vivek12jul.humbugSolver.node.state.Grid;
-import com.vivek12jul.humbugSolver.node.state.State;
-import com.vivek12jul.humbugSolver.node.state.action.Action;
-import com.vivek12jul.humbugSolver.node.state.action.bug.Bug;
+import com.vivek12jul.humbugSolver.service.node.state.Grid;
+import com.vivek12jul.humbugSolver.service.node.state.action.Action;
+import com.vivek12jul.humbugSolver.service.node.state.action.bug.Bug;
 
 import java.util.HashSet;
 

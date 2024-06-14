@@ -1,13 +1,12 @@
-package com.vivek12jul.humbugSolver.node;
+package com.vivek12jul.humbugSolver.service.node;
 
-import com.vivek12jul.humbugSolver.node.state.Grid;
-import com.vivek12jul.humbugSolver.node.state.action.Action;
-import com.vivek12jul.humbugSolver.node.state.action.bug.Bug;
-import com.vivek12jul.humbugSolver.node.state.State;
+import com.vivek12jul.humbugSolver.service.node.state.Grid;
+import com.vivek12jul.humbugSolver.service.node.state.action.Action;
+import com.vivek12jul.humbugSolver.service.node.state.action.bug.Bug;
+import com.vivek12jul.humbugSolver.service.node.state.State;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 public class Node {

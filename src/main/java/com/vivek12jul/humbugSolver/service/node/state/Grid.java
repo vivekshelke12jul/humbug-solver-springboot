@@ -1,4 +1,4 @@
-package com.vivek12jul.humbugSolver.node.state;
+package com.vivek12jul.humbugSolver.service.node.state;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package com.vivek12jul.humbugSolver.node.state.action.bug;
+package com.vivek12jul.humbugSolver.service.node.state.action.bug;
 
 import java.util.Objects;
 
