@@ -105,7 +105,54 @@ public class State {
         return bugs.isEmpty();
     }
 
+    public boolean isValidAcion(Action action){
+        int initialXBug = action.getBug().getRow();
+        int initialYBug = action.getBug().getColumn();
+
+        // new position of the bug
+        int midXBug = initialXBug;
+        int midYBug = initialYBug;
+
+        int newXBug = initialXBug;
+        int newYBug = initialYBug;
+
+        switch (action.getDirection()){
+            case UP:
+                midXBug -= 1;
+                newXBug -= 2;
+                break;
+            case DOWN:
+                midXBug += 1;
+                newXBug += 2;
+                break;
+            case LEFT:
+                midYBug -= 1;
+                newYBug -= 2;
+                break;
+            case RIGHT:
+                midYBug += 1;
+                newYBug += 2;
+                break;
+        }
+
+        // check if the new position/path is Invalid => return false
+        if(
+            newXBug < 0 || newXBug >= this.rows ||
+            newYBug < 0 || newYBug >= this.columns ||
+            this.grid.getMatrix()[midXBug][midYBug] == '#' ||
+            this.grid.getMatrix()[newXBug][newYBug] == 'B' ||
+            this.grid.getMatrix()[newXBug][newYBug] == '#'){
+            return false;
+        }
+        return true;
+    }
+
     public Optional<State> performAction(Action action){
+
+        if(this.isValidAcion(action) == false){
+            return Optional.empty();
+        }
+
         State clonedState = new State(this);
 
         // initial position of the bug
@@ -118,31 +165,22 @@ public class State {
 
         switch (action.getDirection()){
             case UP:
-                newXBug--;
+                newXBug -= 2;
                 break;
             case DOWN:
-                newXBug++;
+                newXBug += 2;
                 break;
             case LEFT:
-                newYBug--;
+                newYBug -= 2;
                 break;
             case RIGHT:
-                newYBug++;
+                newYBug += 2;
                 break;
         }
 
         // remove bug from old position
         clonedState.getGrid().getMatrix()[initialXBug][initialYBug] = ' ';
         clonedState.getBugs().remove(action.getBug());
-
-        // check if the new position is Invalid => return null
-        if(
-                newXBug < 0 || newXBug >= this.rows ||
-                newYBug < 0 || newYBug >= this.columns ||
-                this.grid.getMatrix()[newXBug][newYBug] == 'B' ||
-                this.grid.getMatrix()[newXBug][newYBug] == '#'){
-            return Optional.empty();
-        }
 
         //check if the new position is '*' => add empty tile to new position, because('B' + '*' = ' ')
         if(this.grid.getMatrix()[newXBug][newYBug] == '*'){
