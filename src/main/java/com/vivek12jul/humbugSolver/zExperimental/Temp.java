@@ -3,6 +3,8 @@ package com.vivek12jul.humbugSolver.zExperimental;
 import com.vivek12jul.humbugSolver.service.node.state.Grid;
 import com.vivek12jul.humbugSolver.service.node.state.action.Action;
 import com.vivek12jul.humbugSolver.service.node.state.action.bug.Bug;
+import com.vivek12jul.humbugSolver.service.node.state.action.bug.Snail;
+import com.vivek12jul.humbugSolver.service.node.state.action.bug.Spider;
 
 import java.util.HashSet;
 
@@ -10,8 +12,8 @@ public class Temp {
 
     public static void main(String[] args) {
 
-        Bug bug = new Bug(0,0,"snail");
-        Bug bug2 = new Bug(0,0,"snail");
+        Bug bug = new Snail(0,0);
+        Bug bug2 = new Spider(0,0);
 
         Action action = new Action(bug, Action.Direction.UP);
 

@@ -16,12 +16,12 @@ public class Action {
     public Action(){}
 
     public Action(Bug bug, Direction direction) {
-        this.bug = new Bug(bug.getRow(), bug.getColumn(), bug.getType());
+        this.bug = bug.clone();
         this.direction = direction;
     }
 
     public Action(Action action) {
-        this.bug = new Bug(action.getBug());
+        this.bug = action.getBug().clone();
         this.direction = action.getDirection();
     }
 
@@ -40,7 +40,7 @@ public class Action {
     }
 
     public void setBug(Bug bug) {
-        this.bug = new Bug(bug);
+        this.bug = bug.clone();
     }
 
 }

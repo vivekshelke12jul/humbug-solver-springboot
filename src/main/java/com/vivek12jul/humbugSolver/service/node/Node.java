@@ -50,7 +50,7 @@ public class Node {
         if(action == null){
             this.action = null;
         }else{
-            this.action = new Action(new Bug(action.getBug()), action.getDirection());
+            this.action = new Action(action);
         }
     }
 

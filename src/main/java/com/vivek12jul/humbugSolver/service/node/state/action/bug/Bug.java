@@ -1,27 +1,30 @@
 package com.vivek12jul.humbugSolver.service.node.state.action.bug;
 
-import java.util.Objects;
+import com.vivek12jul.humbugSolver.service.node.state.State;
 
-public class Bug {
+import java.util.Objects;
+import java.util.Optional;
+
+public abstract class Bug {
 
     private int row;
     private int column;
 
-    private String type;
+    private BugType type;
 
     Bug(){}
 
-    public Bug(int row, int column, String type) {
+    public Bug(int row, int column, BugType type) {
         this.row = row;
         this.column = column;
         this.type = type;
     }
 
-    public Bug(Bug bug) {
-        this.row = bug.getRow();
-        this.column = bug.getColumn();
-        this.type = bug.getType();
-    }
+//    public Bug(Bug bug) {
+//        this.row = bug.getRow();
+//        this.column = bug.getColumn();
+//        this.type = bug.getType();
+//    }
 
     @Override
     public boolean equals(Object obj) {
@@ -50,7 +53,7 @@ public class Bug {
         return column;
     }
 
-    public String getType() {
+    public BugType getType() {
         return type;
     }
 
@@ -62,9 +65,16 @@ public class Bug {
         this.column = column;
     }
 
-    public void setType(String type) {
+    public void setType(BugType type) {
         this.type = type;
     }
+
+    public abstract Bug clone(); // Abstract method for cloning
+    abstract public Optional<State> moveUP(State state);
+    abstract public Optional<State>  moveDOWN(State state);
+    abstract public Optional<State>  moveLEFT(State state);
+    abstract public Optional<State>  moveRIGHT(State state);
+
 
     @Override
     public String toString() {
